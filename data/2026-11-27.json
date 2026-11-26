@@ -1,0 +1,219 @@
+{
+  "dateline": "FRIDAY, 27 NOVEMBER 2026",
+  "day": "27 November",
+  "born": [
+    {
+      "name": "Anders Celsius",
+      "role": "Astronomer and inventor of the Celsius scale",
+      "short": "The Swede who gave us degrees Celsius",
+      "born": "27 November 1701",
+      "died": "25 April 1744",
+      "bio": [
+        "Born in Uppsala, Sweden, he became professor of astronomy there and helped to confirm that the Earth is flattened at the poles.",
+        "In 1742 he proposed a temperature scale of 100 degrees between the freezing and boiling points of water.",
+        "Curiously, his original scale ran upside down – water boiled at 0 and froze at 100. It was flipped soon after his death."
+      ]
+    },
+    {
+      "name": "Buster Merryfield",
+      "role": "Actor – Uncle Albert in Only Fools and Horses",
+      "short": "Uncle Albert – “During the war…”",
+      "born": "27 November 1920",
+      "died": "23 June 1999",
+      "bio": [
+        "Born Harry Merryfield in Battersea, London, he spent nearly forty years as a bank clerk and manager, while acting as an amateur.",
+        "He turned professional at 57 after taking early retirement, and in 1985 he joined Only Fools and Horses as Uncle Albert.",
+        "His bushy white beard and endless wartime stories made the old sea dog one of the best-loved characters on British television."
+      ]
+    },
+    {
+      "name": "Ernie Wise",
+      "role": "Comedian – one half of Morecambe and Wise",
+      "short": "The one with the short, fat, hairy legs",
+      "born": "27 November 1925",
+      "died": "21 March 1999",
+      "bio": [
+        "Born in East Ardsley, near Leeds, he was a child performer who met Eric Morecambe as a teenager in 1941.",
+        "Together they became Britain’s favourite double act, and their Christmas specials drew some of the biggest audiences in television history.",
+        "Ernie played the proud “playwright” to Eric’s clown – the plays what he wrote are still repeated every festive season."
+      ]
+    },
+    {
+      "name": "Bruce Lee",
+      "role": "Martial artist and film star",
+      "short": "The legend who took kung fu worldwide",
+      "born": "27 November 1940",
+      "died": "20 July 1973",
+      "bio": [
+        "Born in San Francisco and raised in Hong Kong, he was a child film actor and a dedicated student of martial arts.",
+        "Films such as The Big Boss and Fist of Fury made him a star across Asia, and Enter the Dragon took him worldwide.",
+        "He died aged just 32, but his speed, philosophy and charisma inspired generations of martial artists and film-makers."
+      ]
+    },
+    {
+      "name": "Jimi Hendrix",
+      "role": "Guitarist and songwriter",
+      "short": "Rewrote the rules of the electric guitar",
+      "born": "27 November 1942",
+      "died": "18 September 1970",
+      "bio": [
+        "Born in Seattle, he played backing guitar for soul and R&B acts before moving to London in 1966.",
+        "With the Jimi Hendrix Experience he scored hits such as Hey Joe and Purple Haze, and dazzled audiences at Monterey and Woodstock.",
+        "His career lasted barely four years, yet he is still widely hailed as the greatest electric guitarist of all time."
+      ]
+    },
+    {
+      "name": "Lashana Lynch",
+      "role": "Actor",
+      "short": "From Hammersmith to the world of 007",
+      "born": "27 November 1987",
+      "died": null,
+      "bio": [
+        "Born in Hammersmith, London, to Jamaican parents, she trained at the Arts Educational Schools and began her career on stage and television.",
+        "She played the double-O agent Nomi in No Time to Die, and starred in Captain Marvel, The Woman King and Bob Marley: One Love.",
+        "She also played Miss Honey in Matilda the Musical, and won BAFTA’s Rising Star award."
+      ]
+    }
+  ],
+  "remembered": [
+    {
+      "name": "Ada Lovelace",
+      "role": "Mathematician and computing pioneer",
+      "short": "The first computer programmer",
+      "born": "10 December 1815",
+      "died": "27 November 1852",
+      "bio": [
+        "Daughter of the poet Lord Byron, she was schooled in mathematics and became a friend of the inventor Charles Babbage.",
+        "In 1843 she published notes on his Analytical Engine, including a method for calculating numbers that is often called the first computer program.",
+        "She also foresaw that such machines might one day make music. She died aged just 36."
+      ]
+    },
+    {
+      "name": "Eugene O’Neill",
+      "role": "Playwright",
+      "short": "The father of modern American drama",
+      "born": "16 October 1888",
+      "died": "27 November 1953",
+      "bio": [
+        "Born in a New York hotel room to a touring actor, he spent his youth at sea before turning to writing plays.",
+        "He won four Pulitzer Prizes for drama and, in 1936, the Nobel Prize in Literature.",
+        "His masterpiece, Long Day’s Journey into Night, was staged after his death and is still revived on both sides of the Atlantic."
+      ]
+    },
+    {
+      "name": "Ken Russell",
+      "role": "Film director",
+      "short": "British cinema’s great showman",
+      "born": "3 July 1927",
+      "died": "27 November 2011",
+      "bio": [
+        "Born in Southampton, he made his name with imaginative BBC documentaries about composers such as Elgar and Delius.",
+        "His film of D. H. Lawrence’s Women in Love earned him an Oscar nomination, and he later directed The Who’s rock opera Tommy.",
+        "Bold, flamboyant and often controversial, he was never dull. He died aged 84."
+      ]
+    },
+    {
+      "name": "P. D. James",
+      "role": "Crime novelist",
+      "short": "The Queen of Crime and creator of Dalgliesh",
+      "born": "3 August 1920",
+      "died": "27 November 2014",
+      "bio": [
+        "Born in Oxford, she worked in the NHS and the Home Office while writing detective novels in the early mornings.",
+        "Her poet-detective Adam Dalgliesh appeared in fourteen novels, and she also wrote The Children of Men.",
+        "Made a life peer as Baroness James of Holland Park, she died aged 94."
+      ]
+    }
+  ],
+  "history": [
+    {
+      "year": "1810",
+      "head": "The Berners Street hoax",
+      "body": "Prankster Theodore Hook sends hundreds of tradespeople – and the Lord Mayor of London – to 54 Berners Street, bringing the West End to a standstill."
+    },
+    {
+      "year": "1895",
+      "head": "A will that changed the world",
+      "body": "In Paris, Alfred Nobel signs his last will, leaving most of his fortune to fund the Nobel Prizes."
+    },
+    {
+      "year": "1924",
+      "head": "Let the parade begin",
+      "body": "The first Macy’s Thanksgiving Day Parade marches through New York – with animals from Central Park Zoo, but no giant balloons."
+    },
+    {
+      "year": "1971",
+      "head": "First to reach Mars",
+      "body": "The Soviet Mars 2 lander crash-lands on Mars – the first human-made object to reach the planet’s surface."
+    }
+  ],
+  "charts": [
+    {
+      "year": "1974",
+      "uk": [
+        "David Essex",
+        "Gonna Make You a Star"
+      ],
+      "us": [
+        "Billy Swan",
+        "I Can Help"
+      ]
+    },
+    {
+      "year": "1985",
+      "uk": [
+        "Wham!",
+        "I’m Your Man"
+      ],
+      "us": [
+        "Phil Collins & Marilyn Martin",
+        "Separate Lives"
+      ]
+    },
+    {
+      "year": "2003",
+      "uk": [
+        "Westlife",
+        "Mandy"
+      ],
+      "us": [
+        "Beyoncé feat. Sean Paul",
+        "Baby Boy"
+      ]
+    }
+  ],
+  "sport": [
+    {
+      "year": "1960",
+      "head": "Mr Hockey’s 1,000",
+      "body": "Detroit’s Gordie Howe becomes the first NHL player to reach 1,000 points, with an assist against Toronto."
+    },
+    {
+      "year": "1966",
+      "head": "Points galore",
+      "body": "Washington beat the New York Giants 72–41 – a record 113 points in a single NFL game."
+    },
+    {
+      "year": "2011",
+      "head": "Federer’s sixth in London",
+      "body": "Roger Federer beats Jo-Wilfried Tsonga at the O2 Arena to win a record sixth ATP World Tour Finals title."
+    },
+    {
+      "year": "2016",
+      "head": "Rosberg is champion",
+      "body": "Nico Rosberg finishes second in Abu Dhabi to pip Mercedes team-mate Lewis Hamilton to the Formula One world title."
+    }
+  ],
+  "questions": {
+    "history": "Which of these surprised you most?",
+    "charts": "Which one would you put on first?",
+    "sport": "Do you remember any of these?"
+  },
+  "captions": {
+    "born": "🎂 Born on this day – 27 November\n\nHappy birthday to six remarkable people who share today's date:\n• Anders Celsius (1701) – the Swede who gave us degrees Celsius\n• Buster Merryfield (1920) – Uncle Albert in Only Fools and Horses\n• Ernie Wise (1925) – one half of Morecambe and Wise\n• Bruce Lee (1940) – the legend who took kung fu worldwide\n• Jimi Hendrix (1942) – rewrote the rules of the electric guitar\n• Lashana Lynch (1987) – from Hammersmith to the world of 007\n\nSwipe through for their stories ➡️\nDo you share a birthday with any of them? 🎉",
+    "remembered": "🕊️ We remember – 27 November\n\n• Ada Lovelace (1852) – the computing pioneer often called the first programmer\n• Eugene O'Neill (1953) – Nobel Prize-winning playwright\n• Ken Russell (2011) – British cinema's great showman\n• P. D. James (2014) – the Queen of Crime and creator of Adam Dalgliesh\n\nSwipe through for their stories ➡️\nWho would you add to the list?",
+    "history": "📜 On this day in history – 27 November\n\n• 1810 – The Berners Street hoax brings London's West End to a standstill\n• 1895 – Alfred Nobel signs the will that created the Nobel Prizes\n• 1924 – The first Macy's Thanksgiving Day Parade in New York\n• 1971 – Mars 2 becomes the first human-made object to reach Mars\n\nWhich one surprised you most?",
+    "charts": "🎵 Number one on this day – 27 November\n\n🇬🇧 UK\n• 1974 – David Essex, \"Gonna Make You a Star\"\n• 1985 – Wham!, \"I'm Your Man\"\n• 2003 – Westlife, \"Mandy\"\n\n🇺🇸 US\n• 1974 – Billy Swan, \"I Can Help\"\n• 1985 – Phil Collins & Marilyn Martin, \"Separate Lives\"\n• 2003 – Beyoncé feat. Sean Paul, \"Baby Boy\"\n\nWhich one would you put on first? 🎶",
+    "sport": "🏆 Sport on this day – 27 November\n\n• 1960 – Gordie Howe becomes the first NHL player to reach 1,000 points\n• 1966 – Washington beat the New York Giants 72–41 in a record-breaking NFL game\n• 2011 – Roger Federer wins a record sixth ATP World Tour Finals title in London\n• 2016 – Nico Rosberg pips Lewis Hamilton to the Formula One world title\n\nDo you remember any of these?"
+  }
+}
