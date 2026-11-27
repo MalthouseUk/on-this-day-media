@@ -75,6 +75,12 @@ for name, (acc, sec), title, sub, sc, question in jobs:
     shutil.move(f"out/{name}_reel.mp4", f"{OUT}/{name}_reel.mp4")
 os.chdir(cwd); shutil.rmtree(work)
 
+# JPEG copies of every page for Instagram (which prefers JPEG over PNG)
+from PIL import Image
+for fn in sorted(os.listdir(OUT)):
+    if fn.endswith(".png"):
+        Image.open(os.path.join(OUT, fn)).convert("RGB").save(os.path.join(OUT, fn[:-4] + ".jpg"), quality=93)
+
 c = data["captions"]
 with open(f"{OUT}/captions.txt", "w") as fh:
     for k in ["born", "remembered", "history", "charts", "sport"]:

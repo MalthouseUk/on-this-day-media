@@ -64,3 +64,19 @@ it goes out.
 `clips/history.mp4`, `clips/charts.mp4`, `clips/sport.mp4` and `clips/outro.mp4` are AI film
 clips made once in Higgsfield. The build adds them automatically (film opening + closing shot on
 each video). Do not edit or regenerate them.
+
+## Instagram (same posts, same times)
+- Channel "onthisdayprofile" (Instagram Business, id 6b097b928541f09ecbc107a7).
+- Schedule the same five posts on Instagram at the same five times as Facebook (Instagram has no
+  posting schedule of its own in Buffer; always use `customScheduled` with the Facebook slot times).
+- Posts 1–2: carousel. `metadata.instagram` = {"type": "post", "shouldShareToFeed": true}; use the
+  `.jpg` versions of the pages (not `.png`), in file-name order. Instagram allows max 10 images.
+- Posts 3–5: Reels. `metadata.instagram` = {"type": "reel", "shouldShareToFeed": true}; video asset
+  is the same `*_reel.mp4` file.
+- Caption: the same caption as Facebook, then a blank line and 5–8 hashtags, e.g.
+  `#OnThisDay #History #Nostalgia #OnThisDayInHistory` plus 2–4 topical ones
+  (e.g. #Music #70sMusic for charts, #Football #Sport for sport, names as tags for famous people).
+- Buffer's free plan holds max 10 scheduled posts across BOTH channels. Before creating, count the
+  posts still scheduled; if 5 + 5 would exceed 10, schedule Facebook first and report which
+  Instagram posts could not be scheduled.
+- Check every created Instagram post has status scheduled and no error.
