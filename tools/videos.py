@@ -127,16 +127,108 @@ def outro(accent, section, question):
         return blend_in(paper(), img, fade_mul(t, dur))
     return f
 
+# ---------- AI film clips (Higgsfield), stored in clips/ ----------
+CLIP_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "clips")
+CLIP_FOR = {"HISTORY": "history", "MUSIC": "charts", "SPORT": "sport"}
+CREAM = (246, 240, 226)
+
+class ClipReader:
+    """Streams 1080x1080 RGB frames from a clip; holds the last frame if the clip runs out."""
+    def __init__(self, path):
+        self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", path, "-vf", f"scale={W}:{H},fps={FPS}",
+                                   "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        self.last = None
+    def next(self):
+        buf = self.p.stdout.read(W * H * 3)
+        if len(buf) == W * H * 3:
+            self.last = Image.frombytes("RGB", (W, H), buf)
+        return self.last.copy()
+
+def _shade(top_dark=False):
+    """Dark gradient so cream text reads clearly over the film."""
+    g = Image.new("L", (1, H))
+    for y in range(H):
+        a = max(0.0, (y - H * 0.45) / (H * 0.55)) * 0.82
+        if top_dark:
+            a = max(a, max(0.0, (H * 0.22 - y) / (H * 0.22)) * 0.55)
+        g.putpixel((0, y), int(255 * a))
+    g = g.resize((W, H))
+    layer = Image.new("RGBA", (W, H), (12, 10, 8, 0)); layer.putalpha(g)
+    return layer
+
+_last_clip_frame = {}
+
+def clip_intro(key, accent, title):
+    rd = ClipReader(os.path.join(CLIP_DIR, f"{key}.mp4")); shade = _shade(top_dark=True)
+    def f(t, dur):
+        img = Image.alpha_composite(rd.next().convert("RGBA"), shade).convert("RGB")
+        d = ImageDraw.Draw(img)
+        a0 = ease(t / 0.8)
+        centred(d, 34, "On This Day", font(P_BLACK, 58), ink(CREAM, a0 * 0.95, (40, 34, 30)))
+        a = ease((t - 1.0) / 0.9)
+        if a > 0:
+            kicker(d, 800 + (1 - a) * 20, DAY, ink(CREAM, a, (20, 18, 16)))
+            tf = font(P_BLACK, 96)
+            line = " ".join(title)
+            while d.textlength(line, font=tf) > W - 120: tf = font(P_BLACK, tf.size - 4)
+            centred(d, 840 + (1 - a) * 30, line, tf, ink(CREAM, a, (20, 18, 16)))
+        if t < 0.35:   # gentle fade up from black
+            img = Image.blend(Image.new("RGB", (W, H), (0, 0, 0)), img, t / 0.35)
+        _last_clip_frame[key] = img
+        return img
+    return f
+
+def after_clip(key, fn, xfade=0.6):
+    """Cross-fade from the clip's final frame into the paper title card."""
+    def f(t, dur):
+        img = fn(t, dur)
+        if t < xfade and key in _last_clip_frame:
+            img = Image.blend(_last_clip_frame[key], img, ease(t / xfade))
+        return img
+    return f
+
+def clip_outro(question):
+    rd = ClipReader(os.path.join(CLIP_DIR, "outro.mp4")); shade = _shade(top_dark=True)
+    def f(t, dur):
+        img = Image.alpha_composite(rd.next().convert("RGBA"), shade).convert("RGB")
+        d = ImageDraw.Draw(img)
+        centred(d, 34, "On This Day", font(P_BLACK, 58), CREAM)
+        a = ease((t - 0.4) / 0.8)
+        if a > 0:
+            dk = (20, 18, 16)
+            kicker(d, 730, "YOUR SAY", ink(CREAM, a, dk))
+            qf = font(P_BOLDI, 62); y = 768
+            for line in wrap(d, question, qf, 900):
+                centred(d, y, line, qf, ink(CREAM, a, dk)); y += 74
+            a2 = ease((t - 1.1) / 0.8)
+            centred(d, y + 14, "Tell us in the comments below", font(BASK_I, 36), ink(CREAM, a2, dk))
+        if t < 0.5:    # come in from the paper page
+            img = Image.blend(paper(), img, ease(t / 0.5))
+        if dur - t < 0.6:
+            img = Image.blend(Image.new("RGB", (W, H), (0, 0, 0)), img, max(0, (dur - t) / 0.6))
+        return img
+    return f
+
 def build(name, accent, section, title, sub, scenes, question):
     os.makedirs("scenes", exist_ok=True)
     files = []
-    plan = [("intro", 3.2, intro(accent, section, title, sub))]
+    key = CLIP_FOR.get(section)
+    have_clips = key and os.path.exists(os.path.join(CLIP_DIR, f"{key}.mp4")) \
+        and os.path.exists(os.path.join(CLIP_DIR, "outro.mp4"))
+    if have_clips:
+        plan = [("film", 4.6, clip_intro(key, accent, title)),
+                ("intro", 2.8, after_clip(key, intro(accent, section, title, sub)))]
+    else:
+        plan = [("intro", 3.2, intro(accent, section, title, sub))]
     for i, s in enumerate(scenes):
         if s[0] == "chart":
             plan.append((f"s{i}", 6.0, chart_item(accent, section, *s[1:], i, len(scenes))))
         else:
             plan.append((f"s{i}", 5.5, item(accent, section, *s, i, len(scenes))))
-    plan.append(("outro", 3.5, outro(accent, section, question)))
+    if have_clips:
+        plan.append(("outro", 4.8, clip_outro(question)))
+    else:
+        plan.append(("outro", 3.5, outro(accent, section, question)))
     for tag, dur, fn in plan:
         p = f"scenes/{name}_{tag}.mp4"; encode(p, dur, fn); files.append(p)
     with open(f"scenes/{name}.txt", "w") as fh:

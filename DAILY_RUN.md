@@ -58,3 +58,8 @@ Public media URL pattern:
 Send Simon one short summary: the date, the names/events/chart songs in each post, the times
 scheduled, and anything uncertain. Remind him he can edit or delete any post in Buffer before
 it goes out.
+
+## Film clips
+`clips/history.mp4`, `clips/charts.mp4`, `clips/sport.mp4` and `clips/outro.mp4` are AI film
+clips made once in Higgsfield. The build adds them automatically (film opening + closing shot on
+each video). Do not edit or regenerate them.
