@@ -1,4 +1,5 @@
 from style import *
+H = PAGE_H   # 4:5 portrait pages
 from dates import life
 
 RED = (140, 24, 30)
@@ -7,7 +8,7 @@ RED = (140, 24, 30)
 PX, PY, PW, PH = M, 272, 400, 600
 
 def person_page(fname, section, kick, accent, name, role, bio, n, total, dark=False):
-    img = paper(); d = ImageDraw.Draw(img)
+    img = paper(H); d = ImageDraw.Draw(img)
     masthead(d, section)
     kicker(d, 232, kick, accent)
     nf = font(P_BLACK, 78)
@@ -52,19 +53,19 @@ def person_page(fname, section, kick, accent, name, role, bio, n, total, dark=Fa
                 y += 18
         return y - lh + fs   # bottom of the last line of text
 
-    for fs in (34, 32, 30, 28):
+    for fs in (40, 38, 36, 34, 32, 30, 28):
         if layout(fs, False) <= LIMIT:
             break
     bottom = layout(fs, True)
     if bottom > LIMIT:
         print("OVERFLOW", fname, int(bottom))
-    spaced(d, W - M, H - 104, f"{n} OF {total}", font(OLD_B, 16), GREY, 3, "r")
+    spaced(d, W - M, H - 104, f"{n} OF {total}", font(OLD_B, 20), GREY, 3, "r")
     if n < total:
-        w = spaced(d, M, H - 104, "SWIPE FOR MORE", font(OLD_B, 16), GREY, 3)
-        ax = M + w + 14; ay = H - 95
+        w = spaced(d, M, H - 104, "SWIPE FOR MORE", font(OLD_B, 20), GREY, 3)
+        ax = M + w + 14; ay = H - 92
         d.line([ax, ay, ax + 34, ay], fill=GREY, width=2)
         d.polygon([(ax + 34, ay - 6), (ax + 44, ay), (ax + 34, ay + 6)], fill=GREY)
-    footer(d)
+    footer(d, H)
     img.save(fname)
 
 born = [

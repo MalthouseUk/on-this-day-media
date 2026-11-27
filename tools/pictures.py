@@ -1,8 +1,9 @@
 from style import *
+H = PAGE_H   # 4:5 portrait pages
 from dates import life
 
 def page(fname, section, kick, headline, standfirst, people, band=False, accent=INK):
-    img = paper(); d = ImageDraw.Draw(img)
+    img = paper(H); d = ImageDraw.Draw(img)
     masthead(d, section)
     # headline block
     if band:
@@ -25,7 +26,7 @@ def page(fname, section, kick, headline, standfirst, people, band=False, accent=
         x = M + c * (colw + 48)
         y = top + r * rh + 8
         big = rows <= 2
-        ys, ns, bs = (26, 54, 30) if big else (22, 40, 25)
+        ys, ns, bs = (30, 62, 36) if big else (26, 50, 31)
         if big: y += 20
         spaced(d, x, y + 2, life(name, short=True), font(OLD_B, ys - 4), accent, 2)
         nf = font(P_BOLD, ns)
@@ -37,7 +38,7 @@ def page(fname, section, kick, headline, standfirst, people, band=False, accent=
             d.text((x, ny), ln, font=font(BASK, bs), fill=GREY); ny += bs * 1.45
         if r < rows - 1:
             d.line([x, top + (r + 1) * rh - 6, x + colw, top + (r + 1) * rh - 6], fill=HAIR, width=1)
-    footer(d)
+    footer(d, H)
     img.save(fname)
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import numpy as np
 
-W = H = 1080
+W = H = 1080      # videos are square
+PAGE_H = 1350     # picture posts are 4:5 portrait (1080 x 1350)
 import os
 FD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts") + "/"
 FRAKTUR = FD + "Fraktur.ttf"
@@ -16,7 +17,7 @@ OLD_B = FD + "OldStdBold.ttf"
 
 PAPER = (246, 242, 233)
 INK = (22, 20, 18)
-GREY = (92, 86, 78)
+GREY = (72, 67, 60)   # secondary text: kept dark for easy reading
 HAIR = (170, 162, 150)
 
 DATELINE = "WEDNESDAY, 25 NOVEMBER 2026"
@@ -29,11 +30,11 @@ def font(path, size):
         _cache[k] = ImageFont.truetype(path, size)
     return _cache[k]
 
-_paper = None
-def paper():
-    """Newsprint: fine grain, faint vignette (cached)."""
-    global _paper
-    if _paper is None:
+_papers = {}
+def paper(h=1080):
+    """Newsprint: fine grain, faint vignette (cached per height)."""
+    if h not in _papers:
+        H = h
         img = Image.new("RGB", (W, H), PAPER)
         n = np.asarray(Image.effect_noise((W, H), 22).convert("L"), dtype=np.int16) - 128
         a = np.asarray(img, dtype=np.int16) + (n[..., None] * 0.07).astype(np.int16)
@@ -44,8 +45,8 @@ def paper():
             d.rectangle([i * 5, i * 5, W - i * 5, H - i * 5], outline=int(255 * i / 50))
         vig = vig.filter(ImageFilter.GaussianBlur(50))
         dark = Image.new("RGB", (W, H), tuple(int(c * 0.94) for c in PAPER))
-        _paper = Image.composite(img, dark, vig)
-    return _paper.copy()
+        _papers[h] = Image.composite(img, dark, vig)
+    return _papers[h].copy()
 
 def spaced_len(d, text, fnt, track):
     return sum(d.textlength(c, font=fnt) for c in text) + track * (len(text) - 1)
@@ -93,7 +94,7 @@ def masthead(d, section):
     spaced(d, W / 2, 172, section, df, INK, 3, "c")
     d.line([M, 198, W - M, 198], fill=INK, width=1)
 
-def footer(d):
+def footer(d, H=1080):
     d.line([M, H - 70, W - M, H - 70], fill=INK, width=1)
     d.line([M, H - 66, W - M, H - 66], fill=INK, width=1)
     centred(d, H - 56, "Follow On This Day for your daily edition of history",

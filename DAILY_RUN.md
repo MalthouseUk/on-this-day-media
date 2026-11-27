@@ -4,14 +4,14 @@ These instructions are for the nightly scheduled task that prepares the next day
 for the "On This Day" Facebook Page (owner: Simon, UK, Europe/London time).
 
 ## The five posts (always in this order)
-1. **Born on this day**: multi-photo post (cover + one page per person). 6 people.
+1. **Born on this day**: multi-photo post (cover + one page per person, 4:5 portrait 1080x1350). 6 people.
 2. **We remember** (died on this day): multi-photo post. 4 people.
 3. **Events in history**: video, 3–4 events.
 4. **Top of the charts**: video, UK and US Number 1 for 3 different years.
 5. **Sport on this day**: video, 3–4 moments.
 
 ## Content rules
-- British audience, UK English spelling, warm and slightly witty "quality newspaper" tone.
+- Audience is mostly older readers in the UK. UK English spelling, warm and slightly witty "quality newspaper" tone.
 - Mix of eras and fields. Include British people/events where possible, plus international names.
 - Choose well-known, family-friendly subjects. Avoid violent deaths, suicides, disasters and
   atrocities as headline items. Keep any political figure strictly neutral and factual.
