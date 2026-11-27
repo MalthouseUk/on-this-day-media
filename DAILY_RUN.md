@@ -6,9 +6,9 @@ for the "On This Day" Facebook Page (owner: Simon, UK, Europe/London time).
 ## The five posts (always in this order)
 1. **Born on this day**: multi-photo post (cover + one page per person, 4:5 portrait 1080x1350). 6 people.
 2. **We remember** (died on this day): multi-photo post. 4 people.
-3. **Events in history**: video, 3–4 events.
-4. **Top of the charts**: video, UK and US Number 1 for 3 different years.
-5. **Sport on this day**: video, 3–4 moments.
+3. **Events in history**: Facebook Reel (9:16 video), 3–4 events.
+4. **Top of the charts**: Facebook Reel, UK and US Number 1 for 3 different years.
+5. **Sport on this day**: Facebook Reel, 3–4 moments.
 
 ## Content rules
 - Audience is mostly older readers in the UK. UK English spelling, warm and slightly witty "quality newspaper" tone.
@@ -47,9 +47,10 @@ Public media URL pattern:
 - Read the channel's posting schedule with get_channel and use that day's five time slots, in
   order, for the five posts (born, remembered, history, charts, sport). Use mode
   `customScheduled` with `dueAt` in Europe/London time, `schedulingType` automatic,
-  `metadata.facebook.type` = "post". Skip any slot already in the past.
+  `metadata.facebook.type` = "post" for posts 1–2 and "reel" for posts 3–5. Skip any slot already in the past.
 - Images: one asset per picture, in file-name order, each with short alt text.
-- Videos: a single video asset.
+- Posts 3–5 are **Reels**: use the `*_reel.mp4` file (9:16) as the single video asset and set
+  `metadata.facebook.type` = "reel". (The square `*_NNnov.mp4` files are kept as a spare.)
 - Caption text: the matching section of `captions.txt`.
 - Before creating posts, list the posts already scheduled for that date and do not duplicate.
 - Buffer's free plan holds max 10 scheduled posts at once.

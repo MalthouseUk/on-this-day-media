@@ -69,8 +69,10 @@ jobs = [
      [(s["year"], s["head"], s["body"]) for s in data["sport"]], q["sport"]),
 ]
 for name, (acc, sec), title, sub, sc, question in jobs:
-    videos.build(name, acc, sec, title, sub, sc, question)
+    videos.build(name, acc, sec, title, sub, sc, question)                       # square (feed)
     shutil.move(f"out/{name}.mp4", f"{OUT}/{name}.mp4")
+    videos.build(name + "_reel", acc, sec, title, sub, sc, question, vertical=True)  # 9:16 Reel
+    shutil.move(f"out/{name}_reel.mp4", f"{OUT}/{name}_reel.mp4")
 os.chdir(cwd); shutil.rmtree(work)
 
 c = data["captions"]

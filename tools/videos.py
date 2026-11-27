@@ -17,10 +17,11 @@ def ink(c, a, bg=None):
     bg = bg or BG
     return tuple(int(bg[i] + (c[i] - bg[i]) * a) for i in range(3))
 
-def encode(path, dur, draw_fn):
+def encode(path, dur, draw_fn, size=None):
+    vw, vh = size or (W, H)
     tmp = path[:-4] + ".tmp.mp4"
     p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo",
-        "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
+        "-pix_fmt", "rgb24", "-s", f"{vw}x{vh}", "-r", str(FPS), "-i", "-",
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", tmp],
         stdin=subprocess.PIPE)
     n = int(round(dur * FPS))
@@ -132,20 +133,46 @@ CLIP_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 CLIP_FOR = {"HISTORY": "history", "MUSIC": "charts", "SPORT": "sport"}
 CREAM = (246, 240, 226)
 
+TALL_H = 1920          # Reels are 9:16 (1080 x 1920)
+SQ_Y = 420             # where the square scene sits on the tall page
+
+_feather = None
+def to_tall(fn, accent):
+    """Place a square paper scene on a tall 9:16 page with a date header above it.
+    The bottom of the page is left clear for the Reels caption and buttons."""
+    global _feather
+    if _feather is None:
+        m = Image.new("L", (W, H), 255); dm = ImageDraw.Draw(m)
+        for i in range(60):
+            dm.line([0, i, W, i], fill=int(255 * i / 60)); dm.line([0, H - 1 - i, W, H - 1 - i], fill=int(255 * i / 60))
+        _feather = m
+    head = paper(TALL_H); d = ImageDraw.Draw(head)
+    kicker(d, 236, "ON THIS DAY", accent, size=24)
+    centred(d, 272, DAY.title(), font(P_BLACK, 96), INK)
+    def f(t, dur):
+        img = head.copy()
+        img.paste(fn(t, dur), (0, SQ_Y), _feather)
+        return img
+    return f
+
 class ClipReader:
     """Streams 1080x1080 RGB frames from a clip; holds the last frame if the clip runs out."""
-    def __init__(self, path):
-        self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", path, "-vf", f"scale={W}:{H},fps={FPS}",
+    def __init__(self, path, tall=False):
+        self.size = (W, TALL_H) if tall else (W, H)
+        vf = f"scale={TALL_H}:{TALL_H},crop={W}:{TALL_H},fps={FPS}" if tall else f"scale={W}:{H},fps={FPS}"
+        self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", path, "-vf", vf,
                                    "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         self.last = None
     def next(self):
-        buf = self.p.stdout.read(W * H * 3)
-        if len(buf) == W * H * 3:
-            self.last = Image.frombytes("RGB", (W, H), buf)
+        n = self.size[0] * self.size[1] * 3
+        buf = self.p.stdout.read(n)
+        if len(buf) == n:
+            self.last = Image.frombytes("RGB", self.size, buf)
         return self.last.copy()
 
-def _shade(top_dark=False):
+def _shade(top_dark=False, h=None):
     """Dark gradient so cream text reads clearly over the film."""
+    H = h or globals()["H"]
     g = Image.new("L", (1, H))
     for y in range(H):
         a = max(0.0, (y - H * 0.45) / (H * 0.55)) * 0.82
@@ -158,22 +185,25 @@ def _shade(top_dark=False):
 
 _last_clip_frame = {}
 
-def clip_intro(key, accent, title):
-    rd = ClipReader(os.path.join(CLIP_DIR, f"{key}.mp4")); shade = _shade(top_dark=True)
+def clip_intro(key, accent, title, tall=False):
+    rd = ClipReader(os.path.join(CLIP_DIR, f"{key}.mp4"), tall)
+    hh = TALL_H if tall else H
+    shade = _shade(top_dark=True, h=hh)
+    yb, yk, yt = (150, 1180, 1220) if tall else (34, 800, 840)
     def f(t, dur):
         img = Image.alpha_composite(rd.next().convert("RGBA"), shade).convert("RGB")
         d = ImageDraw.Draw(img)
         a0 = ease(t / 0.8)
-        centred(d, 34, "On This Day", font(P_BLACK, 58), ink(CREAM, a0 * 0.95, (40, 34, 30)))
+        centred(d, yb, "On This Day", font(P_BLACK, 58), ink(CREAM, a0 * 0.95, (40, 34, 30)))
         a = ease((t - 1.0) / 0.9)
         if a > 0:
-            kicker(d, 800 + (1 - a) * 20, DAY, ink(CREAM, a, (20, 18, 16)))
+            kicker(d, yk + (1 - a) * 20, DAY, ink(CREAM, a, (20, 18, 16)))
             tf = font(P_BLACK, 96)
             line = " ".join(title)
             while d.textlength(line, font=tf) > W - 120: tf = font(P_BLACK, tf.size - 4)
-            centred(d, 840 + (1 - a) * 30, line, tf, ink(CREAM, a, (20, 18, 16)))
+            centred(d, yt + (1 - a) * 30, line, tf, ink(CREAM, a, (20, 18, 16)))
         if t < 0.35:   # gentle fade up from black
-            img = Image.blend(Image.new("RGB", (W, H), (0, 0, 0)), img, t / 0.35)
+            img = Image.blend(Image.new("RGB", img.size, (0, 0, 0)), img, t / 0.35)
         _last_clip_frame[key] = img
         return img
     return f
@@ -187,50 +217,54 @@ def after_clip(key, fn, xfade=0.6):
         return img
     return f
 
-def clip_outro(question):
-    rd = ClipReader(os.path.join(CLIP_DIR, "outro.mp4")); shade = _shade(top_dark=True)
+def clip_outro(question, tall=False):
+    rd = ClipReader(os.path.join(CLIP_DIR, "outro.mp4"), tall)
+    hh = TALL_H if tall else H
+    shade = _shade(top_dark=True, h=hh)
+    yb, yk, yq = (150, 1060, 1100) if tall else (34, 730, 768)
     def f(t, dur):
         img = Image.alpha_composite(rd.next().convert("RGBA"), shade).convert("RGB")
         d = ImageDraw.Draw(img)
-        centred(d, 34, "On This Day", font(P_BLACK, 58), CREAM)
+        centred(d, yb, "On This Day", font(P_BLACK, 58), CREAM)
         a = ease((t - 0.4) / 0.8)
         if a > 0:
             dk = (20, 18, 16)
-            kicker(d, 730, "YOUR SAY", ink(CREAM, a, dk))
-            qf = font(P_BOLDI, 62); y = 768
+            kicker(d, yk, "YOUR SAY", ink(CREAM, a, dk))
+            qf = font(P_BOLDI, 62); y = yq
             for line in wrap(d, question, qf, 900):
                 centred(d, y, line, qf, ink(CREAM, a, dk)); y += 74
             a2 = ease((t - 1.1) / 0.8)
             centred(d, y + 14, "Tell us in the comments below", font(BASK_I, 36), ink(CREAM, a2, dk))
         if t < 0.5:    # come in from the paper page
-            img = Image.blend(paper(), img, ease(t / 0.5))
+            img = Image.blend(paper(hh), img, ease(t / 0.5))
         if dur - t < 0.6:
-            img = Image.blend(Image.new("RGB", (W, H), (0, 0, 0)), img, max(0, (dur - t) / 0.6))
+            img = Image.blend(Image.new("RGB", img.size, (0, 0, 0)), img, max(0, (dur - t) / 0.6))
         return img
     return f
 
-def build(name, accent, section, title, sub, scenes, question):
+def build(name, accent, section, title, sub, scenes, question, vertical=False):
     os.makedirs("scenes", exist_ok=True)
     files = []
     key = CLIP_FOR.get(section)
     have_clips = key and os.path.exists(os.path.join(CLIP_DIR, f"{key}.mp4")) \
         and os.path.exists(os.path.join(CLIP_DIR, "outro.mp4"))
+    T = (lambda fn: to_tall(fn, accent)) if vertical else (lambda fn: fn)
     if have_clips:
-        plan = [("film", 4.6, clip_intro(key, accent, title)),
-                ("intro", 2.8, after_clip(key, intro(accent, section, title, sub)))]
+        plan = [("film", 4.6, clip_intro(key, accent, title, vertical)),
+                ("intro", 2.8, after_clip(key, T(intro(accent, section, title, sub))))]
     else:
-        plan = [("intro", 3.2, intro(accent, section, title, sub))]
+        plan = [("intro", 3.2, T(intro(accent, section, title, sub)))]
     for i, s in enumerate(scenes):
         if s[0] == "chart":
-            plan.append((f"s{i}", 6.0, chart_item(accent, section, *s[1:], i, len(scenes))))
+            plan.append((f"s{i}", 6.0, T(chart_item(accent, section, *s[1:], i, len(scenes)))))
         else:
-            plan.append((f"s{i}", 5.5, item(accent, section, *s, i, len(scenes))))
+            plan.append((f"s{i}", 5.5, T(item(accent, section, *s, i, len(scenes)))))
     if have_clips:
-        plan.append(("outro", 4.8, clip_outro(question)))
+        plan.append(("outro", 4.8, clip_outro(question, vertical)))
     else:
-        plan.append(("outro", 3.5, outro(accent, section, question)))
+        plan.append(("outro", 3.5, T(outro(accent, section, question))))
     for tag, dur, fn in plan:
-        p = f"scenes/{name}_{tag}.mp4"; encode(p, dur, fn); files.append(p)
+        p = f"scenes/{name}_{tag}.mp4"; encode(p, dur, fn, (W, TALL_H) if vertical else None); files.append(p)
     with open(f"scenes/{name}.txt", "w") as fh:
         fh.writelines(f"file '{os.path.basename(p)}'\n" for p in files)
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
