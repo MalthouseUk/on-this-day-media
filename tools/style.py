@@ -20,6 +20,7 @@ GREY = (92, 86, 78)
 HAIR = (170, 162, 150)
 
 DATELINE = "WEDNESDAY, 25 NOVEMBER 2026"
+EDITION = 1  # edition number shown in the right-hand ear box
 
 _cache = {}
 def font(path, size):
@@ -78,7 +79,7 @@ def masthead(d, section):
     # ears
     ef = font(BASK_I, 17); eb = font(OLD_B, 15)
     for x0, top, l1, l2 in [(M, 58, "THE DAILY", "History Edition"),
-                            (W - M - 150, 58, "No. 1", "Every day · Free")]:
+                            (W - M - 150, 58, f"No. {EDITION}", "Every day · Free")]:
         d.rectangle([x0, top, x0 + 150, top + 76], outline=INK, width=1)
         spaced(d, x0 + 75, top + 14, l1, eb, INK, 2, "c")
         centred(d, top + 40, l2, ef, GREY, cx=x0 + 75)

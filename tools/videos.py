@@ -79,9 +79,9 @@ def item(accent, section, year, head, body, idx, total):
         a3 = ease((t - 0.8) / 0.6)
         d.line([W / 2 - 120 * a3, y + 22, W / 2 + 120 * a3, y + 22], fill=accent, width=3)
         a4 = ease((t - 1.1) / 0.8)
-        bf = font(BASK, 34); y += 50
+        bf = font(BASK, 40); y += 50
         for line in wrap(d, body, bf, 860):
-            centred(d, y, line, bf, ink(GREY, a4)); y += 50
+            centred(d, y, line, bf, ink(GREY, a4)); y += 56
         progress(d, idx, total, accent)
         return blend_in(paper(), img, fade_mul(t, dur))
     return f
@@ -106,7 +106,7 @@ def chart_item(accent, section, year, uk, us, idx, total):
             af = font(P_BOLD, 50); yy += 50
             for ln in wrap(d, artist, af, colw):
                 centred(d, yy, ln, af, ink(INK, ak), cx=cx); yy += 60
-            sf = font(BASK_I, 32); yy += 8
+            sf = font(BASK_I, 37); yy += 8
             for ln in wrap(d, "\u201c" + song + "\u201d", sf, colw):
                 centred(d, yy, ln, sf, ink(GREY, ak), cx=cx); yy += 44
         progress(d, idx, total, accent)

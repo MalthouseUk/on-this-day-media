@@ -26,6 +26,9 @@ import style, dates
 date = sys.argv[1]
 data = json.load(open(os.path.join(ROOT, "data", f"{date}.json")))
 style.DATELINE = data["dateline"]
+import datetime
+# Edition No. 1 was 25 November 2026; the number goes up by one each day
+style.EDITION = (datetime.date.fromisoformat(date) - datetime.date(2026, 11, 25)).days + 1
 import pictures, people, videos
 videos.DAY = data["day"].upper()
 

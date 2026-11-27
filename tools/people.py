@@ -10,42 +10,54 @@ def person_page(fname, section, kick, accent, name, role, bio, n, total, dark=Fa
     img = paper(); d = ImageDraw.Draw(img)
     masthead(d, section)
     kicker(d, 232, kick, accent)
-    nf = font(P_BLACK, 84)
+    nf = font(P_BLACK, 78)
     while d.textlength(name, font=nf) > W - 2 * M - 40:
         nf = font(P_BLACK, nf.size - 4)
-    centred(d, 262 + (84 - nf.size) // 2, name, nf, INK)
-    centred(d, 364, role, font(P_ITAL, 34), accent)
-    spaced(d, W / 2, 420, life(name), font(OLD_B, 20), GREY, 3, "c")
-    d.line([W / 2 - 60, 464, W / 2 + 60, 464], fill=accent, width=3)
-    # body column with a drop cap on the first paragraph
-    x0, colw = 130, W - 260
-    bf = font(BASK, 28); lh = 42
-    y = 494
-    for pi, para in enumerate(bio):
-        if pi == 0:
-            cap, rest = para[0], para[1:]
-            cf = font(P_BLACK, 150)
-            # baseline of the cap sits on the baseline of the third line
-            d.text((x0 - 2, y + 2 * lh + 24), cap, font=cf, fill=accent, anchor="ls")
-            indent = d.textlength(cap, font=cf) + 14
-            words = rest.split(); lines = []; cur = ""
-            first = True
-            for w_ in words:
-                maxw = colw - indent if len(lines) < 3 else colw
-                t = (cur + " " + w_) if cur else w_
-                if d.textlength(t, font=bf) <= maxw: cur = t
-                else: lines.append(cur); cur = w_
-            if cur: lines.append(cur)
-            y_cap = y + 3 * lh
-            for li, ln in enumerate(lines):
-                d.text((x0 + (indent if li < 3 else 0), y), ln, font=bf, fill=INK); y += lh
-            y = max(y, y_cap)
-        else:
-            for ln in wrap(d, para, bf, colw):
-                d.text((x0, y), ln, font=bf, fill=INK); y += lh
-        y += 18
-    if y > H - 120:
-        print("OVERFLOW", fname, y)
+    centred(d, 256 + (78 - nf.size) // 2, name, nf, INK)
+    centred(d, 350, role, font(P_ITAL, 34), accent)
+    spaced(d, W / 2, 402, life(name), font(OLD_B, 20), GREY, 3, "c")
+    d.line([W / 2 - 60, 442, W / 2 + 60, 442], fill=accent, width=3)
+    # body column with a drop cap on the first paragraph.
+    # Large text for phones; steps down only if a long bio would not fit.
+    x0, colw = 80, W - 160
+    LIMIT = H - 118   # bottom of the last line must stay above the page counter
+
+    def layout(fs, draw):
+        bf = font(BASK, fs); lh = int(fs * 1.47)
+        cf = font(P_BLACK, int(fs * 5.06))
+        y = 468
+        for pi, para in enumerate(bio):
+            if pi == 0:
+                cap, rest = para[0], para[1:]
+                if draw:
+                    d.text((x0 - 2, y + 2 * lh + int(fs * 0.8)), cap, font=cf, fill=accent, anchor="ls")
+                indent = d.textlength(cap, font=cf) + 14
+                words = rest.split(); lines = []; cur = ""
+                for w_ in words:
+                    maxw = colw - indent if len(lines) < 3 else colw
+                    t = (cur + " " + w_) if cur else w_
+                    if d.textlength(t, font=bf) <= maxw: cur = t
+                    else: lines.append(cur); cur = w_
+                if cur: lines.append(cur)
+                y_cap = y + 3 * lh
+                for li, ln in enumerate(lines):
+                    if draw: d.text((x0 + (indent if li < 3 else 0), y), ln, font=bf, fill=INK)
+                    y += lh
+                y = max(y, y_cap)
+            else:
+                for ln in wrap(d, para, bf, colw):
+                    if draw: d.text((x0, y), ln, font=bf, fill=INK)
+                    y += lh
+            if pi < len(bio) - 1:
+                y += 18
+        return y - lh + fs   # bottom of the last line of text
+
+    for fs in (34, 32, 30, 28):
+        if layout(fs, False) <= LIMIT:
+            break
+    bottom = layout(fs, True)
+    if bottom > LIMIT:
+        print("OVERFLOW", fname, int(bottom))
     spaced(d, W - M, H - 104, f"{n} OF {total}", font(OLD_B, 16), GREY, 3, "r")
     if n < total:
         w = spaced(d, M, H - 104, "SWIPE FOR MORE", font(OLD_B, 16), GREY, 3)

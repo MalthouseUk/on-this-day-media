@@ -25,7 +25,7 @@ def page(fname, section, kick, headline, standfirst, people, band=False, accent=
         x = M + c * (colw + 48)
         y = top + r * rh + 8
         big = rows <= 2
-        ys, ns, bs = (26, 54, 26) if big else (22, 40, 21)
+        ys, ns, bs = (26, 54, 30) if big else (22, 40, 25)
         if big: y += 20
         spaced(d, x, y + 2, life(name, short=True), font(OLD_B, ys - 4), accent, 2)
         nf = font(P_BOLD, ns)
